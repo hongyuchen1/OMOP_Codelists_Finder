@@ -1,0 +1,37 @@
+{
+  "name": "omop-codeset-finder",
+  "version": "1.0.0",
+  "description": "Build OMOP CDM codesets: search, expand and validate concept_ids in your Athena vocabulary files or OMOP database, optionally only concepts that occur in your patient data.",
+  "author": {
+    "name": "Hongyu Chen"
+  },
+  "homepage": "https://github.com/hongyuchen1/OMOP_Codelists_Finder",
+  "repository": "https://github.com/hongyuchen1/OMOP_Codelists_Finder",
+  "keywords": [
+    "omop",
+    "ohdsi",
+    "codeset",
+    "concept-set",
+    "athena",
+    "vocabulary",
+    "phenotype"
+  ],
+  "mcpServers": {
+    "postgres": {
+      "command": "uv",
+      "args": ["run", "--quiet", "--script", "${CLAUDE_PLUGIN_ROOT}/server/mcp_server.py", "postgres"]
+    },
+    "rxclass": {
+      "command": "uv",
+      "args": ["run", "--quiet", "--script", "${CLAUDE_PLUGIN_ROOT}/server/mcp_server.py", "rxclass"]
+    },
+    "loinc": {
+      "command": "uv",
+      "args": ["run", "--quiet", "--script", "${CLAUDE_PLUGIN_ROOT}/server/mcp_server.py", "loinc"]
+    },
+    "do": {
+      "command": "uv",
+      "args": ["run", "--quiet", "--script", "${CLAUDE_PLUGIN_ROOT}/server/mcp_server.py", "do"]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# Local configuration and secrets (the default config lives in ~/.config/omop-codeset-finder/)
+config.yaml
+!config.example.yaml
+.env
+
+# Caches
+*.duckdb
+*.duckdb.tmp-*
+__pycache__/
+*.pyc
+.venv/
+.DS_Store

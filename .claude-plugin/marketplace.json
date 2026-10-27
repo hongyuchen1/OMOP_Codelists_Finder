@@ -1,0 +1,16 @@
+{
+  "name": "omop-codelists-finder",
+  "owner": {
+    "name": "Hongyu Chen"
+  },
+  "metadata": {
+    "description": "OMOP Codelists Finder: an agent skill and MCP tools for building OMOP CDM codesets."
+  },
+  "plugins": [
+    {
+      "name": "omop-codeset-finder",
+      "source": "./",
+      "description": "Skill + MCP tools that build tool-verified OMOP CDM codesets from Athena vocabulary files or an OMOP Postgres database."
+    }
+  ]
+}
