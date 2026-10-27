@@ -1,0 +1,22 @@
+{
+  "postgres": {
+    "command": "uv",
+    "args": ["run", "--quiet", "--script", "server/mcp_server.py", "postgres"],
+    "transport": "stdio"
+  },
+  "rxclass": {
+    "command": "uv",
+    "args": ["run", "--quiet", "--script", "server/mcp_server.py", "rxclass"],
+    "transport": "stdio"
+  },
+  "loinc": {
+    "command": "uv",
+    "args": ["run", "--quiet", "--script", "server/mcp_server.py", "loinc"],
+    "transport": "stdio"
+  },
+  "do": {
+    "command": "uv",
+    "args": ["run", "--quiet", "--script", "server/mcp_server.py", "do"],
+    "transport": "stdio"
+  }
+}

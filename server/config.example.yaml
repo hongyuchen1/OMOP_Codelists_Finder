@@ -1,0 +1,60 @@
+# OMOP Codeset Finder — configuration
+#
+# Lives at ~/.config/omop-codeset-finder/config.yaml (or wherever $OMOP_CODESET_FINDER_CONFIG
+# points). The agent writes it with the `configure` tool of the `postgres` MCP server; or copy
+# this file there and edit it. Values may reference environment variables: ${VAR} or
+# ${VAR:-default}.
+# A .env file next to config.yaml is loaded automatically (keep passwords there).
+
+# Where the vocabulary lives: "duckdb" (Athena CSV/Parquet files) or "postgres" (OMOP database)
+backend: duckdb
+
+# true  = only return concepts that actually occur in your patient data (CDM event tables).
+#         Requires duckdb.cdm_dir or postgres.cdm_schema below.
+# false = vocabulary-only search; no patient data needed.
+only_with_patient: false
+
+duckdb:
+  # Folder with the Athena download (CONCEPT.csv, CONCEPT_SYNONYM.csv, CONCEPT_ANCESTOR.csv,
+  # CONCEPT_RELATIONSHIP.csv). .csv/.tsv/.parquet are all accepted; names are case-insensitive.
+  vocab_dir: /absolute/path/to/athena_vocabulary
+  # Athena CSVs are tab-delimited and unquoted. Use "auto" to let DuckDB sniff other formats.
+  vocab_delimiter: "\t"
+
+  # Optional: folder with CDM event tables (condition_occurrence, drug_exposure, measurement,
+  # procedure_occurrence, observation, device_exposure) as CSV or Parquet. Needed for
+  # only_with_patient and count-patients. Leave empty if you have no patient data.
+  cdm_dir:
+  cdm_delimiter: auto
+
+  # Optional but strongly recommended for full Athena downloads: vocab tables are materialized
+  # once into this DuckDB file (rebuilt automatically when source files change).
+  # Leave empty to scan the CSVs on every call.
+  cache_db: ~/.cache/omop-codeset-finder/omop.duckdb
+
+  # Optional explicit file names when they don't follow the default naming:
+  # vocab_files: {concept: CONCEPT.csv, concept_synonym: CONCEPT_SYNONYM.csv}
+  # cdm_files: {condition_occurrence: conditions.parquet}
+
+postgres:
+  host: ${OMOP_DB_HOST:-localhost}
+  port: ${OMOP_DB_PORT:-5432}
+  dbname: ${OMOP_DB_NAME:-omop}
+  user: ${OMOP_DB_USER:-postgres}
+  password: ${OMOP_DB_PASSWORD}
+  # sslmode: require          # or verify-full, with sslrootcert: /path/to/ca.pem
+  vocab_schema: vocab      # schema holding concept, concept_ancestor, ...
+  cdm_schema:              # schema holding condition_occurrence, ... (empty = no patient data)
+  statement_timeout_s: 120
+
+# Optional: change which CDM table/columns count as "patient data" per concept domain.
+# Defaults check both the standard and the source concept column of each event table.
+# patient_filter:
+#   domains:
+#     CONDITION: {table: condition_occurrence, columns: [condition_source_concept_id]}
+#     DEVICE: null   # disable a domain
+
+# Optional: LOINC Search API credentials (free account at loinc.org) for the `loinc` server
+loinc:
+  username: ${LOINC_USERNAME}
+  password: ${LOINC_PASSWORD}
